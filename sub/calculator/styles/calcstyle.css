@@ -1,4 +1,17 @@
 /* Global definitions */
+
+/* Fonts */
+
+@font-face { 
+    font-family: "Technology"; 
+    src: url("fonts/Technology.ttf") format("truetype"); 
+    }
+
+h1 {
+    font-family: Technology;
+    font-size: 50px;
+}
+
 .center {
     margin-right: auto;
     margin-left: auto;
