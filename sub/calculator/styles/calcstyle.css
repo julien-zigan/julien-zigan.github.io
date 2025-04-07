@@ -7,4 +7,6 @@
 /* Specifics */
 .calculator {
     background-color: #5d5e6c;
+    border: 3px solid #7d7d8b;
+    border-radius: 5%;
 }
