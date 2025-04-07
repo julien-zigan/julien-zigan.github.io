@@ -1,0 +1,10 @@
+/* Global definitions */
+.center {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Specifics */
+.calculator {
+    background-color: #5d5e6c;
+}
