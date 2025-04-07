@@ -3,13 +3,28 @@
 /* Fonts */
 
 @font-face { 
-    font-family: "Technology"; 
-    src: url("fonts/Technology.ttf") format("truetype"); 
+    font-family: "technology"; 
+    src: url("/sub/calculator/fonts/Technology-Bold.ttf") format("truetype"); 
     }
 
+html {
+    background-color: black;
+    
+}
+
+body {
+    box-sizing: border-box;
+    margin: 0;
+    height: 100vh;
+    background-color: #7d7d8b;
+    border: 20px solid #9292a0;
+    border-radius: 3%;
+}
+
 h1 {
-    font-family: Technology;
-    font-size: 50px;
+    text-align: center;
+    font-family: technology;
+    font-size: 80px;
 }
 
 .center {
@@ -19,7 +34,7 @@ h1 {
 
 /* Specifics */
 .calculator {
-    background-color: #5d5e6c;
-    border: 3px solid #7d7d8b;
+    background-color: #ffcfdb;
+    border: 3px solid #fddeed;
     border-radius: 5%;
 }
