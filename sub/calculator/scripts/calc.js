@@ -5,11 +5,13 @@ let reg;
 
 // Loops through the number buttons and registers pressNumBtn onclick
 for (let i = 0; i < 10; i++) {
-    registerListener(document.getElementById(i.toString()));
+    registerListeners(document.getElementById(i.toString()));
 }
 
-function registerListener(item) {
+function registerListeners(item) {
     item.addEventListener("click", pressNumBtn);
+    item.addEventListener("mousedown", btnStyle);
+    item.addEventListener("mouseup", btnDeStyle);
 }
 
 function pressNumBtn (e) {
@@ -20,6 +22,13 @@ function pressNumBtn (e) {
     }
 }
 
+function btnStyle (e) {
+    this.style.backgroundColor = "white";
+}
+
+function btnDeStyle (e) {
+    this.style = "initial";
+}
 
 
 btnProcent.addEventListener("click", pressNumBtn);

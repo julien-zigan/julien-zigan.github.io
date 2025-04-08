@@ -17,8 +17,10 @@ body {
         'Lucida Sans', 'Lucida Sans Regular', 
         'Lucida Grande', 'Lucida Sans Unicode', 
         Geneva, Verdana, sans-serif;
-    margin: 0;
+    margin: auto;
     height: 100%;
+    max-width: 700px;
+    min-width: 460px;
     background-color: #7d7d8b;
     border: 10px solid #9292a0;
     border-radius: 3%;
@@ -57,6 +59,20 @@ th {
     font-size:35px;
     padding-right: 5px;
     padding-bottom: 5px;
+}
+
+td {
+background-color: rgb(196, 181, 181);
+}
+
+td:hover {
+    background-color: rgb(224, 211, 211);
+}
+
+a {
+    text-decoration: none;
+    font-weight: bold;
+    color: red;
 }
 
 .calculator, table {
