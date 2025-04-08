@@ -1,6 +1,9 @@
 
 const display = document.getElementById("display");
+let result; 
+let reg;
 
+// Loops through the number buttons and registers pressNumBtn onclick
 for (let i = 0; i < 10; i++) {
     registerListener(document.getElementById(i.toString()));
 }
@@ -16,6 +19,7 @@ function pressNumBtn (e) {
         display.innerText += this.innerText;
     }
 }
+
 
 
 btnProcent.addEventListener("click", pressNumBtn);
