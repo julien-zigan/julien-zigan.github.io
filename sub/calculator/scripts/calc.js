@@ -3,14 +3,19 @@ const display = document.getElementById("display");
 let result; 
 let reg;
 
-for (let i = 0; i < 14; i++) {
+for (let i = 0; i < 16; i++) {
     registerListeners(document.getElementById(i.toString()));
 }
 
 function registerListeners(item) {
     item.addEventListener("mousedown", btnStyle);
     item.addEventListener("mouseup", btnDeStyle);
-    item.addEventListener("click", pressNumBtn);
+    if (item.getAttribute("id") < 15) {
+        item.addEventListener("click", pressNumBtn);
+    }
+    else {
+        item.addEventListener("click", calculate);
+    }
 }
 
 function btnStyle (e) {
@@ -22,7 +27,7 @@ function btnDeStyle (e) {
 }
 
 function calculate() {
-    eval(display.innerText);
+    display.innerText = eval(display.innerText);
 }
 
 function pressNumBtn (e) {
@@ -33,4 +38,3 @@ function pressNumBtn (e) {
     }
 }
 
-document.getElementById("15").addEventListener("click", calculate);
