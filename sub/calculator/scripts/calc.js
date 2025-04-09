@@ -3,23 +3,14 @@ const display = document.getElementById("display");
 let result; 
 let reg;
 
-// Loops through the number buttons and registers pressNumBtn onclick
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 14; i++) {
     registerListeners(document.getElementById(i.toString()));
 }
 
 function registerListeners(item) {
-    item.addEventListener("click", pressNumBtn);
     item.addEventListener("mousedown", btnStyle);
     item.addEventListener("mouseup", btnDeStyle);
-}
-
-function pressNumBtn (e) {
-    if (display.innerText === "0") {
-        display.innerText = this.innerText;
-    } else {
-        display.innerText += this.innerText;
-    }
+    item.addEventListener("click", pressNumBtn);
 }
 
 function btnStyle (e) {
@@ -30,20 +21,16 @@ function btnDeStyle (e) {
     this.style = "initial";
 }
 
+function calculate() {
+    eval(display.innerText);
+}
 
-btnProcent.addEventListener("click", pressNumBtn);
-btnDivide.addEventListener("click", pressNumBtn);
-btnMultiply.addEventListener("click", pressNumBtn);
-btnAdd.addEventListener("click", pressNumBtn);
-btnSubtract.addEventListener("click", pressNumBtn);
+function pressNumBtn (e) {
+    if (display.innerText === "0") {
+        display.innerText = this.innerText;
+    } else {
+        display.innerText += this.innerText;
+    }
+}
 
-const btnUnion = document.getElementById("()");
-const btnProcent = document.getElementById("%");
-const btnAC = document.getElementById("AC");
-const btnDivide = document.getElementById("/");
-const btnMultiply = document.getElementById("x");
-const btnSubtract = document.getElementById("-");
-const btnAdd = document.getElementById("+");
-const btnResult = document.getElementById("=");
-const btnBack = document.getElementById("back");
-const btnPoint = document.getElementById(".");
+document.getElementById("15").addEventListener("click", calculate);
