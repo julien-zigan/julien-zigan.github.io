@@ -5,10 +5,11 @@
 @font-face { 
     font-family: "technology"; 
     src: url("/sub/calculator/fonts/Technology-Bold.ttf") format("truetype"); 
-    }
+}
 
 html {
     background-color: black;
+    overflow: hidden;
 }
 
 body {
@@ -19,8 +20,7 @@ body {
         Geneva, Verdana, sans-serif;
     margin: auto;
     height: 100%;
-    max-width: 700px;
-    min-width: 460px;
+    width: 400px;
     background-color: #7d7d8b;
     border: 10px solid #9292a0;
     border-radius: 3%;
@@ -34,7 +34,8 @@ body {
 /* Specifics */
 
 h1 {
-    
+    text-align: right;
+    font-family: technology;
     font-size: 80px;
     padding-top: 80px;
     padding-left: 20px;
@@ -44,25 +45,20 @@ h1 {
     background-color: #a3baaa;
 }
 
-h2, p {
-    padding-left: 50px;
+table {
+    border-spacing: 10px;
+    margin-top: 30px;
+    margin-bottom: 40px;
 }
-
-th, td {
+td {
     border: 1px solid #ffb6d9;
     border-radius: 10px;
     padding: 25px;
 }
     
-th {
-    background-color: #e6bacf;
-    font-size:35px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-}
-
 td {
-background-color: rgb(196, 181, 181);
+    background-color: rgb(196, 181, 181);
+    
 }
 
 td:hover {
@@ -73,19 +69,4 @@ a {
     text-decoration: none;
     font-weight: bold;
     color: red;
-}
-
-.calculator, table {
-    background-color: #ffcfdb;
-    border: 3px solid #fddeed;
-    border-radius: 5%;
-    padding: 20px;
-    margin-top: 50px;
-    margin-bottom: 100px;
-
-}
-
-.digital {
-    text-align: right;
-    font-family: technology;
 }

@@ -1,13 +1,13 @@
 const display = document.getElementById("display");
 
-for (let i = 0; i < 16; i++) {
+for (let i = 0; i < 17; i++) {
     registerListeners(document.getElementById(i.toString()));
 }
 
 function registerListeners(item) {
     item.addEventListener("mousedown", btnStyle);
     item.addEventListener("mouseup", btnDeStyle);
-    if (item.getAttribute("id") < 15) {
+    if (item.getAttribute("id") < 16) {
         item.addEventListener("click", pressNumBtn);
     }
     else {
@@ -16,7 +16,7 @@ function registerListeners(item) {
 }
 
 function btnStyle (e) {
-    this.style.backgroundColor = "white";
+    this.style.backgroundColor = "darkgrey";
 }
 
 function btnDeStyle (e) {
