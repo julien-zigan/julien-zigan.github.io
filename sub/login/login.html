@@ -1,61 +1,78 @@
 <!DOCTYPE html>
 <html lang="en-US">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jerp | Register</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <h1>Register</h1>
+      <h1>Register</h1>
     </header>
     <form action="http://192.168.0.20:8080/register" method="POST">
+      <fieldset>
+        <legend>Name</legend>
         <label for="firstName">First Name</label>
-        <input type="text" name="firstName" id="firstName">
-        <br>
+        <input type="text" name="firstName" id="firstName" />
+        <br />
         <label for="lastName">Last Name</label>
-        <input type="text" name="lastName" id="lastName">
-        <br>
-        <label for="">Street</label>
-        <input type="text" name="street" id="street">
-        <br>
-        <label for="city">City</label>
-        <input type="text" name="city" id="city">
-        <br>
-        <label for="zipCode">ZIP</label>
-        <input type="text" name="zipCode" id="zipCode">
-        <br>
-        <label for="country">Country</label>
-        <input type="text" name="country" id="country">
-        <br>
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email">
-        <br>
-        <label for=phoneNumer>Phone</label>
-        <input type="text" name=phoneNumer id=phoneNumer>
-        <br>
-        <label for="website">Website</label>
-        <input type="text" name="website" id="website">
-        <br>
+        <input type="text" name="lastName" id="lastName" />
+        <br />
+      </fieldset>
+      <fieldset>
+        <legend>Professional</legend>
         <label for="Ort">Profession</label>
-        <input type="text" name="profession" id="profession">
-        <br>
-        <label for="bankName">Bank Name</label>
-        <input type="text" name="bankName" id="bankName">
-        <br>
-        <label for="iban">IBAN</label>
-        <input type="text" name="iban" id="iban">
-        <br>
-        <label for="bic">BIC</label>
-        <input type="text" name="bic" id="bic">
-        <br>
-        <label for="taxNumber">Tax Number</label>
-        <input type="text" name="taxNumber" id="taxNumber">
-        <br>
-        <label for="pathToDocumentDirectory">Where do you want to store your Invoices?</label>
-        <input type="text" name="pathToDocumentDirectory" id="pathToDocumentDirectory">
-        <br>
-        <input type="submit" value="save">
+        <input type="text" name="profession" id="profession" />
+        <br />
+        <label for="website">Website</label>
+        <input type="text" name="website" id="website" />
+        <br />
+      </fieldset>
+      <fieldset>
+        <legend>Address</legend>
+        <label for="">Street</label>
+        <input type="text" name="street" id="street" />
+        <br />
+        <label for="city">City</label>
+        <input type="text" name="city" id="city" />
+        <br />
+        <label for="zipCode">ZIP</label>
+        <input type="text" name="zipCode" id="zipCode" />
+        <br />
+        <label for="country">Country</label>
+        <input type="text" name="country" id="country" />
+      </fieldset>
+      <fieldset>
+        <legend>Contact</legend>
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" />
+        <br />
+        <label for="phoneNumer">Phone</label>
+        <input type="text" name="phoneNumer" id="phoneNumer" />
+      </fieldset>
+
+      <label for="bankName">Bank Name</label>
+      <input type="text" name="bankName" id="bankName" />
+      <br />
+      <label for="iban">IBAN</label>
+      <input type="text" name="iban" id="iban" />
+      <br />
+      <label for="bic">BIC</label>
+      <input type="text" name="bic" id="bic" />
+      <br />
+      <label for="taxNumber">Tax Number</label>
+      <input type="text" name="taxNumber" id="taxNumber" />
+      <br />
+      <label for="pathToDocumentDirectory"
+        >Where do you want to store your Invoices?</label
+      >
+      <input
+        type="text"
+        name="pathToDocumentDirectory"
+        id="pathToDocumentDirectory"
+      />
+      <br />
+      <input type="submit" value="save" />
     </form>
-</body>
+  </body>
 </html>
