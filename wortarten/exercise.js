@@ -291,9 +291,9 @@ function setDifficulty(level, announce = true) {
   const name = difficulty[0].toUpperCase() + difficulty.slice(1);
   const next = levels[(levels.indexOf(difficulty) + 1) % levels.length];
   document.querySelector('.card').dataset.difficulty = difficulty;
-  difficultyButton.textContent = `${name} · ${difficulty === 'schwer' ? 'Eintragen' : 'Zuordnen'}`;
+  document.querySelector('#difficulty-label').textContent = `${name} · ${difficulty === 'schwer' ? 'Eintragen' : 'Zuordnen'}`;
   difficultyButton.removeAttribute('aria-pressed');
-  difficultyButton.setAttribute('aria-label', `Schwierigkeit: ${name}. Zu ${next} wechseln.`);
+  difficultyButton.setAttribute('aria-label', `Schwierigkeit wählen: zu ${next} wechseln`);
   selected = null;
   render();
   hideHint();
