@@ -3,7 +3,7 @@ const groups = [
     { id: 'deklinierbar', label: 'deklinierbar', leaves: ['Substantive', 'Adjektive', 'Artikel', 'Pronomen'] },
     { id: 'konjugierbar', label: 'konjugierbar', leaves: ['Verben'] }
   ] },
-  { id: 'nicht-flektierbar', label: 'nicht flektierbar', leaves: ['Konjunktionen', 'Präpositionen', 'Adverben', 'Partikeln', 'Interjektionen'] }
+  { id: 'nicht-flektierbar', label: 'nicht flektierbar', leaves: ['Konjunktionen', 'Präpositionen', 'Adverbien', 'Partikeln', 'Interjektionen'] }
 ];
 const labels = new Map();
 const slots = new Map();
@@ -202,7 +202,7 @@ const acceptedNames = {
   verben: ['Verb', 'Zeitwort', 'Zeitwörter', 'Tunwort', 'Tunwörter', 'Tätigkeitswort', 'Tätigkeitswörter'],
   konjunktionen: ['Konjunktion', 'Bindewort', 'Bindewörter'],
   präpositionen: ['Präposition', 'Verhältniswort', 'Verhältniswörter'],
-  adverben: ['Adverb', 'Umstandswort', 'Umstandswörter'],
+  adverbien: ['Adverb', 'Umstandswort', 'Umstandswörter'],
   partikeln: ['Partikel'],
   interjektionen: ['Interjektion', 'Ausrufewort', 'Ausrufewörter'],
   'nicht-flektierbar': ['unflektierbar', 'nicht flektierbare', 'unveränderlich'],
