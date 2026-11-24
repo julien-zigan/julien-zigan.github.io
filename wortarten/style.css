@@ -8,8 +8,18 @@ h1 { margin: 0; font-size: 1.6rem; grid-column: 2; grid-row: 1; text-align: cent
 .level { margin: 0; color: #405c70; font-weight: 650; grid-column: 3; grid-row: 1; justify-self: end; font-size: .875rem; text-align: right; }
 button { font: inherit; cursor: pointer; border-radius: .45rem; min-height: 44px; padding: .4rem .6rem; border: 2px solid #526879; overflow-wrap: anywhere; }
 button:focus-visible, .diagram-scroll:focus-visible { outline: 3px solid #111827; outline-offset: 3px; box-shadow: 0 0 0 3px white; }
-.token.node, .slot.node { background: #e2edff; border-color: #42669b; color: #173f78; }
-.token.leaf, .slot.leaf { background: #fff0d5; border-color: #906218; color: #694000; }
+.level { background: transparent; border-color: #527865; text-decoration: underline; text-underline-offset: .2em; }
+.level:hover { background: #a9dac3; }
+.token.node, .slot.node { background: var(--node-background, #e2edff); border-color: var(--node-border, #42669b); color: var(--node-text, #173f78); }
+.token.leaf, .slot.leaf { background: var(--leaf-background, #fff0d5); border-color: var(--leaf-border, #906218); color: var(--leaf-text, #694000); }
+.card[data-difficulty="mittel"] {
+  --node-background: #f0f2f4;
+  --leaf-background: #f0f2f4;
+  --node-border: #526879;
+  --leaf-border: #526879;
+  --node-text: #192d3d;
+  --leaf-text: #192d3d;
+}
 .bank { display: flex; flex-direction: column; justify-content: center; align-content: center; gap: .5rem; align-self: stretch; padding: 1rem; margin: 0; background: #eef0f2; }
 .bank:empty::after { content: 'Alle Begriffe sind im Baum. Zum Ändern einen belegten Begriff auswählen.'; color: #405c70; }
 .token { touch-action: manipulation; font-size: 1rem; min-height: 44px; }

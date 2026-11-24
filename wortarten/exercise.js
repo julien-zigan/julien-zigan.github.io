@@ -10,6 +10,8 @@ const slots = new Map();
 const assignments = new Map();
 const bank = document.querySelector('#bank');
 const status = document.querySelector('#status');
+const difficultyButton = document.querySelector('#difficulty');
+let difficulty = 'leicht';
 let selected = null;
 
 function makeSlot(id, label, type, parent = null) {
@@ -84,8 +86,8 @@ function select(id) {
 }
 
 function place(id, target) {
-  if (!labels.has(id)) return;
-  if (labels.get(id).type !== labels.get(target).type) {
+  if (!labels.has(id) || !slots.has(target)) return;
+  if (difficulty === 'leicht' && labels.get(id).type !== labels.get(target).type) {
     status.textContent = 'Achte auf die Farbe: Verzweigungen gehören in blaue Felder, Wortarten in gelbe.';
     return;
   }
@@ -109,7 +111,7 @@ function render() {
     button.type = 'button';
     button.className = `token ${type}`;
     button.textContent = label;
-    button.setAttribute('aria-label', `${label}, ${type === 'node' ? 'Verzweigung' : 'Wortart'}`);
+    button.setAttribute('aria-label', difficulty === 'mittel' ? label : `${label}, ${type === 'node' ? 'Verzweigung' : 'Wortart'}`);
     button.setAttribute('aria-describedby', 'hint');
     button.dataset.label = id;
     button.draggable = true;
@@ -123,11 +125,12 @@ function render() {
   });
   let node = 0;
   let leaf = 0;
+  let position = 0;
   slots.forEach((button, id) => {
     const value = assignments.get(id);
     const type = labels.get(id).type;
     const number = type === 'node' ? ++node : ++leaf;
-    const field = `${type === 'node' ? 'Verzweigung' : 'Wortart'} ${number}`;
+    const field = difficulty === 'mittel' ? `Feld ${++position}` : `${type === 'node' ? 'Verzweigung' : 'Wortart'} ${number}`;
     button.textContent = value ? labels.get(value).label : '';
     button.setAttribute('aria-label', `${field}: ${value ? labels.get(value).label : 'leer'}`);
     button.setAttribute('aria-pressed', String(Boolean(value && value === selected)));
@@ -174,6 +177,19 @@ function reset() {
 }
 document.querySelector('#reset').addEventListener('click', reset);
 reset();
+
+difficultyButton.addEventListener('click', () => {
+  difficulty = difficulty === 'leicht' ? 'mittel' : 'leicht';
+  const medium = difficulty === 'mittel';
+  document.querySelector('.card').dataset.difficulty = difficulty;
+  difficultyButton.textContent = `${medium ? 'Mittel' : 'Leicht'} · Zuordnen`;
+  difficultyButton.setAttribute('aria-pressed', String(medium));
+  difficultyButton.setAttribute('aria-label', `Schwierigkeit: ${medium ? 'Mittel. Zu Leicht' : 'Leicht. Zu Mittel'} wechseln.`);
+  selected = null;
+  render();
+  hideHint();
+  status.textContent = medium ? 'Mittel: ohne Farbhilfen. Deine Zuordnungen bleiben erhalten.' : 'Leicht: mit Farbhilfen. Deine Zuordnungen bleiben erhalten.';
+});
 
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape') {
