@@ -1,22 +1,22 @@
 :root { font-family: system-ui, sans-serif; color: #192d3d; background: #f1f5f9; line-height: 1.5; }
 * { box-sizing: border-box; }
 body { margin: 0; padding: .75rem; }
-.card { width: 100%; min-height: calc(100dvh - 1.5rem); margin: auto; padding: 1rem; background: white; border: 1px solid #d6e0e8; border-radius: 1rem; display: grid; grid-template-columns: 180px minmax(0, 1fr); grid-template-rows: auto 1fr auto; gap: .75rem 1rem; }
+.card { width: 100%; min-height: calc(100dvh - 1.5rem); margin: auto; padding: 1rem; background: white; border: 1px solid #d6e0e8; border-radius: 1rem; display: grid; grid-template-columns: 200px minmax(0, 1fr); grid-template-rows: auto 1fr auto; gap: 1rem clamp(1.5rem, 3vw, 3.5rem); }
 header, footer { grid-column: 1 / -1; }
 header { display: grid; grid-template-columns: 1fr auto 1fr; gap: .5rem; align-items: center; margin: -1rem -1rem 0; padding: .85rem 1rem; background: #edf2f6; border-bottom: 1px solid #d6e0e8; border-radius: 1rem 1rem 0 0; }
 h1 { margin: 0; font-size: 1.6rem; grid-column: 2; grid-row: 1; text-align: center; }
 .level { margin: 0; color: #405c70; font-weight: 650; grid-column: 3; grid-row: 1; justify-self: end; font-size: .875rem; text-align: right; }
-button { font: inherit; cursor: pointer; border-radius: .45rem; padding: .4rem .6rem; border: 1px solid #6b8192; }
-button:focus-visible, .diagram-scroll:focus-visible { outline: 3px solid #1e40af; outline-offset: 3px; }
-.token.node, .slot.node { background: #e2edff; border-color: #6d91cb; color: #173f78; }
-.token.leaf, .slot.leaf { background: #fff0d5; border-color: #c9953b; color: #694000; }
-.bank { display: flex; flex-direction: column; gap: .35rem; align-self: center; padding: .5rem; margin: 0; border: 1px dashed #8396a6; border-radius: .6rem; }
+button { font: inherit; cursor: pointer; border-radius: .45rem; min-height: 44px; padding: .4rem .6rem; border: 2px solid #526879; overflow-wrap: anywhere; }
+button:focus-visible, summary:focus-visible, .diagram-scroll:focus-visible { outline: 3px solid #111827; outline-offset: 3px; box-shadow: 0 0 0 3px white; }
+.token.node, .slot.node { background: #e2edff; border-color: #42669b; color: #173f78; }
+.token.leaf, .slot.leaf { background: #fff0d5; border-color: #906218; color: #694000; }
+.bank { display: flex; flex-direction: column; justify-content: center; align-content: center; gap: .5rem; align-self: stretch; padding: 1rem; margin: 0; background: #e4eaf1; }
 .bank:empty::after { content: 'Alle Begriffe sind im Baum. Zum Ändern einen belegten Begriff auswählen.'; color: #405c70; }
-.token { touch-action: manipulation; font-size: 1rem; min-height: 38px; }
+.token { touch-action: manipulation; font-size: 1rem; min-height: 44px; }
 .token[aria-pressed="true"], .slot[aria-pressed="true"] { outline: 3px solid #1e40af; outline-offset: 2px; }
-.diagram-scroll { overflow-x: auto; padding: .25rem .2rem; }
+.diagram-scroll { overflow-x: auto; padding: .5rem; }
 .tree { min-width: 600px; text-align: center; position: relative; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto 44px 44px auto; gap: 1rem 1rem; padding: 0 .25rem; }
-.connectors { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; fill: none; stroke: #95a7b5; stroke-width: 2; }
+.connectors { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; fill: none; stroke: #526879; stroke-width: 2; }
 .tree .root, .tree .slot { position: relative; }
 .root { display: inline-block; padding: .4rem 2rem; border: 1px solid #6b8192; border-radius: .45rem; background: #edf2f6; font-weight: 700; }
 .root { grid-column: 1 / 4; justify-self: center; }
@@ -29,7 +29,7 @@ button:focus-visible, .diagram-scroll:focus-visible { outline: 3px solid #1e40af
 [data-group="deklinierbar"] > .leaves { grid-column: 1; }
 [data-group="konjugierbar"] > .leaves { grid-column: 2; }
 [data-group="nicht-flektierbar"] > .leaves { grid-column: 3; }
-.slot { width: 100%; max-width: 220px; height: 44px; border: 1px dashed; font-size: 1rem; }
+.slot { width: 100%; max-width: 220px; min-height: 44px; height: auto; border: 2px dashed; font-size: 1rem; }
 .slot.filled { border-style: solid; font-weight: 600; }
 .leaves { grid-row: 4; align-self: start; justify-self: center; width: 100%; max-width: 220px; list-style: none; margin: 0; padding: 0; }
 .leaves li + li { margin-top: .4rem; }
@@ -42,6 +42,14 @@ footer .secondary { background: white; color: #214f87; }
 #status { margin: 0; flex: 1 1 240px; font-size: 1rem; }
 #status:empty { display: none; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.help { grid-column: 1; grid-row: 1; position: relative; justify-self: start; font-size: 1rem; }
+.help summary { cursor: pointer; padding: .5rem; min-height: 44px; color: #173f78; text-decoration: underline; }
+.help p { position: absolute; z-index: 2; top: 100%; left: 0; width: min(30rem, 75vw); margin: .5rem 0 0; padding: 1rem; background: white; color: #192d3d; border: 2px solid #526879; border-radius: .5rem; box-shadow: 0 .25rem 1rem #192d3d33; }
+@media (forced-colors: active) {
+  .connectors { stroke: CanvasText; }
+  .token[aria-pressed="true"], .slot[aria-pressed="true"] { outline: 3px solid Highlight; }
+  .slot.correct, .slot.incorrect { border-color: CanvasText; }
+}
 @media (min-width: 1100px) {
   .card {
     --exercise-font: clamp(1rem, min(1.65vw, 2.7dvh), 1.8rem);

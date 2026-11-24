@@ -19,6 +19,7 @@ function makeSlot(id, label, type, parent = null) {
   button.className = `slot ${type}`;
   button.dataset.id = id;
   button.dataset.type = type;
+  button.setAttribute('aria-describedby', 'hint');
   button.addEventListener('click', () => {
     if (selected) place(selected, id);
     else if (assignments.has(id)) select(assignments.get(id));
@@ -108,6 +109,8 @@ function render() {
     button.type = 'button';
     button.className = `token ${type}`;
     button.textContent = label;
+    button.setAttribute('aria-label', `${label}, ${type === 'node' ? 'Verzweigung' : 'Wortart'}`);
+    button.setAttribute('aria-describedby', 'hint');
     button.dataset.label = id;
     button.draggable = true;
     button.setAttribute('aria-pressed', String(selected === id));
@@ -171,6 +174,13 @@ function reset() {
 }
 document.querySelector('#reset').addEventListener('click', reset);
 reset();
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    if (selected) select(selected);
+    document.querySelector('.help').open = false;
+  }
+});
 
 // Draw connectors from the actual box positions, including after resizing.
 const tree = document.querySelector('#tree');
