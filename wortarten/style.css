@@ -105,3 +105,22 @@ footer .secondary:hover { background: #e3e7e7; }
   header { padding: .75rem; }
   .level { font-size: .75rem; }
 }
+
+/* Use phone-sized viewports in both browsers and device previews. */
+@media (max-width: 600px),
+       (max-width: 950px) and (max-height: 500px) and (pointer: coarse) {
+  header { grid-template-columns: 1fr; }
+  h1 { grid-column: 1; }
+  .difficulty-control { grid-column: 1; grid-row: 2; justify-self: center; }
+  .diagram-scroll { padding: 1rem .25rem; }
+  .tree {
+    min-width: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto 80px 80px auto;
+    gap: 1.25rem .25rem;
+    padding: 0;
+  }
+  .tree .slot, .tree .leaves { max-width: 100%; min-width: 0; }
+  .tree .slot { height: 80px; padding: .3rem .2rem; overflow-wrap: anywhere; }
+  .bank { padding: .75rem; gap: .35rem; }
+}
