@@ -12,19 +12,17 @@
     <header>
       <p class="level">Leicht · Zuordnen</p>
       <h1>Wortarten</h1>
-      <p>Ziehe die Begriffe in die passenden Felder. Du kannst auch erst einen Begriff und dann ein Feld anklicken.</p>
-      <p>Die Reihenfolge der Wortarten innerhalb einer Gruppe ist egal.</p>
-      <p class="legend"><span class="node-key">Verzweigungen</span> <span class="leaf-key">Wortarten</span> · Gleiche Farben gehören zusammen.</p>
     </header>
-    <section aria-label="Begriffe zum Zuordnen" id="bank" class="bank"></section>
-    <div class="diagram-scroll" tabindex="0" role="region" aria-label="Wortartenbaum, bei Bedarf horizontal scrollbar">
+    <section aria-label="Begriffe zum Zuordnen" aria-describedby="hint" title="Begriffe ziehen oder Begriff und Feld anklicken. Die Reihenfolge innerhalb einer Blattgruppe ist egal." id="bank" class="bank"></section>
+    <div class="diagram-scroll" tabindex="0" role="region" aria-describedby="hint" title="Begriffe ziehen oder Begriff und Feld anklicken. Die Reihenfolge innerhalb einer Blattgruppe ist egal." aria-label="Wortartenbaum, bei Bedarf horizontal scrollbar">
       <div id="tree" class="tree"></div>
     </div>
     <footer>
-      <button id="check" type="button">Überprüfen</button>
+      <p id="status" role="status" aria-live="polite"></p>
       <button id="reset" type="button" class="secondary">Neu starten</button>
-      <p id="status" role="status" aria-live="polite">Ordne alle 14 Begriffe zu. „Wort“ ist bereits vorgegeben.</p>
+      <button id="check" type="button">Überprüfen</button>
     </footer>
+    <p id="hint" class="visually-hidden">Begriffe ziehen oder Begriff und Feld anklicken. Die Reihenfolge innerhalb einer Blattgruppe ist egal.</p>
     <noscript>Bitte aktiviere JavaScript, um die Begriffe zuzuordnen.</noscript>
   </main>
 </body>

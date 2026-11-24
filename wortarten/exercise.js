@@ -167,7 +167,7 @@ function reset() {
     [order[i], order[j]] = [order[j], order[i]];
   }
   render();
-  status.textContent = 'Ordne alle 14 Begriffe zu. „Wort“ ist bereits vorgegeben.';
+  status.textContent = '';
 }
 document.querySelector('#reset').addEventListener('click', reset);
 reset();

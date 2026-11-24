@@ -8,5 +8,8 @@
 - Use German for learning content and controls. Keep exercise pages free of site navigation so they can serve directly as iframe content.
 - For drag-and-drop exercises, also support selecting a label and a destination with clicks, touch, or keyboard. Provide feedback and a restart control.
 - In the Wortarten tree, leaf order within each parent group does not affect correctness.
+- Keep exercises compact enough to see the label bank, diagram, and controls together on typical desktop screens; preserve readable controls and scrolling on smaller screens.
+- Use available screen width before reducing text size; keep draggable labels and diagram labels at least 1rem.
+- Let the exercise card fill the viewport height and scale desktop labels and boxes with available width and height.
 - Use clear language, semantic HTML, accessible controls, and keyboard support. Respect reduced-motion preferences for animations.
 - Keep code readable and changes small. Check that navigation, standalone pages, and iframe embedding work after relevant changes.
