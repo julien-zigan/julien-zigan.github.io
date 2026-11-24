@@ -57,6 +57,8 @@ footer button { background: #dce5eb; color: #243e50; border-color: #637989; font
 footer button:hover { background: #cbd8e1; }
 footer .secondary { background: #fafbf9; color: #354957; border-color: #73828c; font-weight: 400; }
 footer .secondary:hover { background: #e3e7e7; }
+#reset { margin-right: auto; display: inline-flex; align-items: center; gap: .45em; }
+.button-icon { width: 1.2em; height: 1.2em; flex: none; }
 #status { margin: 0; flex: 1 1 240px; font-size: 1rem; }
 #status:empty { display: none; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
