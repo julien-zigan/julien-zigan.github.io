@@ -197,8 +197,7 @@ function drawConnectors() {
     const start = point(parent, true);
     children.forEach(child => {
       const end = point(child);
-      const middle = (start.y + end.y) / 2;
-      line([start, { x: start.x, y: middle }, { x: end.x, y: middle }, end]);
+      line([start, end]);
     });
   }
   connectNodes(root, groups.map(group => slots.get(group.id)));
