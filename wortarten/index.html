@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wortarten – Zuordnen</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="exercise.js" defer></script>
+</head>
+<body>
+  <main class="card">
+    <header>
+      <p class="level">Leicht · Zuordnen</p>
+      <h1>Wortarten</h1>
+      <p>Ziehe die Begriffe in die passenden Felder. Du kannst auch erst einen Begriff und dann ein Feld anklicken.</p>
+      <p>Die Reihenfolge der Wortarten innerhalb einer Gruppe ist egal.</p>
+      <p class="legend"><span class="node-key">Verzweigungen</span> <span class="leaf-key">Wortarten</span> · Gleiche Farben gehören zusammen.</p>
+    </header>
+    <section aria-label="Begriffe zum Zuordnen" id="bank" class="bank"></section>
+    <div class="diagram-scroll" tabindex="0" role="region" aria-label="Wortartenbaum, bei Bedarf horizontal scrollbar">
+      <div id="tree" class="tree"></div>
+    </div>
+    <footer>
+      <button id="check" type="button">Überprüfen</button>
+      <button id="reset" type="button" class="secondary">Neu starten</button>
+      <p id="status" role="status" aria-live="polite">Ordne alle 14 Begriffe zu. „Wort“ ist bereits vorgegeben.</p>
+    </footer>
+    <noscript>Bitte aktiviere JavaScript, um die Begriffe zuzuordnen.</noscript>
+  </main>
+</body>
+</html>

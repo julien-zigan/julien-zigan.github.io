@@ -1,0 +1,42 @@
+:root { font-family: system-ui, sans-serif; color: #192d3d; background: #f1f5f9; line-height: 1.5; }
+* { box-sizing: border-box; }
+body { margin: 0; padding: clamp(.5rem, 3vw, 2rem); }
+.card { max-width: 1100px; margin: auto; padding: clamp(1rem, 3vw, 2rem); background: white; border: 1px solid #d6e0e8; border-radius: 1rem; }
+h1 { margin: .2rem 0; font-size: 2rem; }
+header p { margin: .6rem 0; }
+.level { color: #405c70; font-weight: 650; }
+button { font: inherit; cursor: pointer; border-radius: .45rem; padding: .6rem .85rem; border: 1px solid #6b8192; }
+button:focus-visible, .diagram-scroll:focus-visible { outline: 3px solid #1e40af; outline-offset: 3px; }
+.node-key, .leaf-key { display: inline-block; border-radius: .3rem; padding: .1rem .4rem; }
+.node-key, .token.node, .slot.node { background: #e2edff; border-color: #6d91cb; color: #173f78; }
+.leaf-key, .token.leaf, .slot.leaf { background: #fff0d5; border-color: #c9953b; color: #694000; }
+.bank { display: flex; flex-wrap: wrap; gap: .5rem; min-height: 4rem; padding: 1rem; margin: 1.3rem 0; border: 1px dashed #8396a6; border-radius: .6rem; }
+.bank:empty::after { content: 'Alle Begriffe sind im Baum. Zum Ändern einen belegten Begriff auswählen.'; color: #405c70; }
+.token { touch-action: manipulation; }
+.token[aria-pressed="true"], .slot[aria-pressed="true"] { outline: 3px solid #1e40af; outline-offset: 2px; }
+.diagram-scroll { overflow-x: auto; padding: .5rem .2rem 1.5rem; }
+.tree { min-width: 740px; text-align: center; position: relative; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto 48px 48px auto; gap: 1.6rem 2rem; padding: 0 1rem; }
+.connectors { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; fill: none; stroke: #95a7b5; stroke-width: 2; }
+.tree .root, .tree .slot { position: relative; }
+.root { display: inline-block; padding: .55rem 2rem; border: 1px solid #6b8192; border-radius: .45rem; background: #edf2f6; font-weight: 700; }
+.root { grid-column: 1 / 4; justify-self: center; }
+.branches, .branch { display: contents; }
+.branch > .slot { justify-self: center; }
+[data-group="flektierbar"] > .slot { grid-column: 1 / 3; grid-row: 2; }
+[data-group="nicht-flektierbar"] > .slot { grid-column: 3; grid-row: 2; }
+[data-group="deklinierbar"] > .slot { grid-column: 1; grid-row: 3; }
+[data-group="konjugierbar"] > .slot { grid-column: 2; grid-row: 3; }
+[data-group="deklinierbar"] > .leaves { grid-column: 1; }
+[data-group="konjugierbar"] > .leaves { grid-column: 2; }
+[data-group="nicht-flektierbar"] > .leaves { grid-column: 3; }
+.slot { width: 100%; max-width: 190px; min-height: 48px; border: 1px dashed; font-size: .95rem; }
+.slot.filled { border-style: solid; font-weight: 600; }
+.leaves { grid-row: 4; align-self: start; justify-self: center; width: 100%; max-width: 190px; list-style: none; margin: 0; padding: 0; }
+.leaves li + li { margin-top: .6rem; }
+.slot.dragover { outline: 3px solid #1e40af; }
+.slot.correct { border: 3px solid #257341; }
+.slot.incorrect { border: 3px solid #b42318; }
+footer { border-top: 1px solid #d6e0e8; padding-top: 1rem; }
+footer button { background: #214f87; color: white; margin: 0 .5rem .5rem 0; }
+footer .secondary { background: white; color: #214f87; }
+#status { margin-bottom: 0; }
