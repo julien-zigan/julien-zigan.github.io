@@ -285,9 +285,9 @@ function reset() {
 document.querySelector('#reset').addEventListener('click', reset);
 reset();
 
-difficultyButton.addEventListener('click', () => {
+function setDifficulty(level, announce = true) {
   const levels = ['leicht', 'mittel', 'schwer'];
-  difficulty = levels[(levels.indexOf(difficulty) + 1) % levels.length];
+  difficulty = levels.includes(level) ? level : 'leicht';
   const name = difficulty[0].toUpperCase() + difficulty.slice(1);
   const next = levels[(levels.indexOf(difficulty) + 1) % levels.length];
   document.querySelector('.card').dataset.difficulty = difficulty;
@@ -300,8 +300,12 @@ difficultyButton.addEventListener('click', () => {
   hint.textContent = difficulty === 'schwer'
     ? 'Trage die Begriffe in die Felder ein. Kleine Tippfehler werden verziehen. Mit Enter überprüfst du deine Antworten.'
     : 'Ziehe einen Begriff in ein passendes Feld oder klicke zuerst den Begriff und dann das Feld an.';
-  status.textContent = `${name}: ${difficulty === 'schwer' ? 'Begriffe selbst eintragen' : difficulty === 'mittel' ? 'ohne Farbhilfen' : 'mit Farbhilfen'}.`;
+  status.textContent = announce ? `${name}: ${difficulty === 'schwer' ? 'Begriffe selbst eintragen' : difficulty === 'mittel' ? 'ohne Farbhilfen' : 'mit Farbhilfen'}.` : '';
   requestAnimationFrame(syncBoxSize);
+}
+difficultyButton.addEventListener('click', () => {
+  const levels = ['leicht', 'mittel', 'schwer'];
+  setDifficulty(levels[(levels.indexOf(difficulty) + 1) % levels.length]);
 });
 
 document.addEventListener('keydown', event => {
@@ -405,3 +409,5 @@ for (const region of [bank, document.querySelector('.diagram-scroll')]) {
 }
 hint.addEventListener('pointerenter', () => clearTimeout(hintTimer));
 hint.addEventListener('pointerleave', leaveHint);
+
+setDifficulty(new URLSearchParams(window.location.search).get('difficulty'), false);
