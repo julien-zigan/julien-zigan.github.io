@@ -11,6 +11,7 @@
 - Keep exercises compact enough to see the label bank, diagram, and controls together on typical desktop screens; preserve readable controls and scrolling on smaller screens.
 - Use available screen width before reducing text size; keep draggable labels and diagram labels at least 1rem.
 - Let the exercise card fill the viewport height and scale desktop labels and boxes with available width and height.
+- Keep diagram backgrounds white. Use muted, distinct backgrounds for the title, full label column, and footer, without a white frame around the label area.
 - Use clear language, semantic HTML, accessible controls, and keyboard support. Respect reduced-motion preferences for animations.
 - Show short, large-text instructions on delayed hover or keyboard focus; keep them available to screen readers. Keep controls at least 44px tall, use high-contrast boundaries and focus indicators, and communicate feedback beyond color alone.
 - Keep code readable and changes small. Check that navigation, standalone pages, and iframe embedding work after relevant changes.
