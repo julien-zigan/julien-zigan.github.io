@@ -8,7 +8,7 @@
 - Use German for learning content and controls. Keep exercise pages free of site navigation so they can serve directly as iframe content.
 - For drag-and-drop exercises, also support selecting a label and a destination with clicks, touch, or keyboard. Provide feedback and a restart control.
 - In the Wortarten tree, leaf order within each parent group does not affect correctness.
-- The top-right difficulty button toggles Leicht/Mittel and preserves assignments. Mittel uses uniform neutral label/slot colors, permits all placements, and omits category hints from accessible names.
+- The difficulty button cycles Leicht/Mittel/Schwer and preserves separate drag and written answers. Mittel removes category hints; Schwer uses colored text inputs without a label bank. Accept unordered leaves, singular/plural forms, common German synonyms, and small typos; reject wrong groups and duplicate answers.
 - Keep exercises compact enough to see the label bank, diagram, and controls together on typical desktop screens; preserve readable controls and scrolling on smaller screens.
 - Use available screen width before reducing text size; keep draggable labels and diagram labels at least 1rem.
 - Let the exercise card fill the viewport height and scale desktop labels and boxes with available width and height.

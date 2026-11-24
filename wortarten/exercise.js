@@ -12,6 +12,7 @@ const bank = document.querySelector('#bank');
 const status = document.querySelector('#status');
 const difficultyButton = document.querySelector('#difficulty');
 let difficulty = 'leicht';
+const writtenAnswers = new Map();
 let selected = null;
 
 function makeSlot(id, label, type, parent = null) {
@@ -104,8 +105,9 @@ function place(id, target) {
 
 function render() {
   bank.replaceChildren();
+  bank.hidden = difficulty === 'schwer';
   const used = new Set(assignments.values());
-  order.filter(id => !used.has(id)).forEach(id => {
+  order.filter(id => difficulty !== 'schwer' && !used.has(id)).forEach(id => {
     const { label, type } = labels.get(id);
     const button = document.createElement('button');
     button.type = 'button';
@@ -127,15 +129,42 @@ function render() {
   let leaf = 0;
   let position = 0;
   slots.forEach((button, id) => {
+    const hard = difficulty === 'schwer';
+    if ((button.tagName === 'INPUT') !== hard) {
+      const previous = button;
+      if (hard) {
+        button = document.createElement('input');
+        button.type = 'text';
+        button.autocomplete = 'off';
+        button.spellcheck = false;
+        button.setAttribute('aria-describedby', 'hint');
+        button.addEventListener('input', () => {
+          writtenAnswers.set(id, button.value);
+          button.classList.remove('correct', 'incorrect');
+          button.removeAttribute('aria-invalid');
+          button.setAttribute('aria-label', button.dataset.field);
+          status.textContent = '';
+        });
+        button.addEventListener('keydown', event => {
+          if (event.key === 'Enter') document.querySelector('#check').click();
+        });
+      } else button = makeSlot(id, labels.get(id).label, labels.get(id).type, labels.get(id).parent);
+      previous.replaceWith(button);
+      slots.set(id, button);
+    }
     const value = assignments.get(id);
     const type = labels.get(id).type;
     const number = type === 'node' ? ++node : ++leaf;
     const field = difficulty === 'mittel' ? `Feld ${++position}` : `${type === 'node' ? 'Verzweigung' : 'Wortart'} ${number}`;
-    button.textContent = value ? labels.get(value).label : '';
-    button.setAttribute('aria-label', `${field}: ${value ? labels.get(value).label : 'leer'}`);
-    button.setAttribute('aria-pressed', String(Boolean(value && value === selected)));
+    button.dataset.field = field;
+    if (hard) button.value = writtenAnswers.get(id) || '';
+    else button.textContent = value ? labels.get(value).label : '';
+    button.setAttribute('aria-label', hard ? field : `${field}: ${value ? labels.get(value).label : 'leer'}`);
+    button.removeAttribute('aria-invalid');
+    if (hard) button.removeAttribute('aria-pressed');
+    else button.setAttribute('aria-pressed', String(Boolean(value && value === selected)));
     button.className = `slot ${type}${value ? ' filled' : ''}`;
-    button.draggable = Boolean(value);
+    button.draggable = !hard && Boolean(value);
     if (value) button.dataset.label = value;
     else delete button.dataset.label;
   });
@@ -144,6 +173,7 @@ function render() {
 document.querySelector('#check').addEventListener('click', () => {
   selected = null;
   render();
+  if (difficulty === 'schwer') { checkWrittenAnswers(); return; }
   let correct = 0;
   slots.forEach((button, id) => {
     const value = assignments.get(id);
@@ -164,8 +194,85 @@ document.querySelector('#check').addEventListener('click', () => {
     : `${correct} von ${labels.size} richtig. ${labels.size - assignments.size} Felder sind noch frei. Du kannst Begriffe auswählen und versetzen; belegte Felder tauschen ihre Begriffe.`;
 });
 
+const acceptedNames = {
+  substantive: ['Substantiv', 'Nomen', 'Nomina', 'Namenwort', 'Namenwörter', 'Hauptwort', 'Hauptwörter'],
+  adjektive: ['Adjektiv', 'Eigenschaftswort', 'Eigenschaftswörter'],
+  artikel: ['Begleiter'],
+  pronomen: ['Fürwort', 'Fürwörter', 'Pronomina'],
+  verben: ['Verb', 'Zeitwort', 'Zeitwörter', 'Tunwort', 'Tunwörter', 'Tätigkeitswort', 'Tätigkeitswörter'],
+  konjunktionen: ['Konjunktion', 'Bindewort', 'Bindewörter'],
+  präpositionen: ['Präposition', 'Verhältniswort', 'Verhältniswörter'],
+  adverben: ['Adverb', 'Umstandswort', 'Umstandswörter'],
+  partikeln: ['Partikel'],
+  interjektionen: ['Interjektion', 'Ausrufewort', 'Ausrufewörter'],
+  'nicht-flektierbar': ['unflektierbar', 'nicht flektierbare', 'unveränderlich'],
+  flektierbar: ['flektierbare', 'veränderlich'],
+  deklinierbar: ['deklinierbare'],
+  konjugierbar: ['konjugierbare']
+};
+
+function normalizeAnswer(value) {
+  return value.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe')
+    .replace(/ü/g, 'ue').replace(/ß/g, 'ss').normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
+}
+
+// Edit distance includes adjacent letter swaps, a common typing mistake.
+function spellingDistance(a, b) {
+  const table = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+  for (let j = 0; j <= b.length; j++) table[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      table[i][j] = Math.min(table[i - 1][j] + 1, table[i][j - 1] + 1,
+        table[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        table[i][j] = Math.min(table[i][j], table[i - 2][j - 2] + 1);
+      }
+    }
+  }
+  return table[a.length][b.length];
+}
+
+function recognizeAnswer(value) {
+  const normalized = normalizeAnswer(value);
+  if (!normalized) return null;
+  const scores = [...labels].map(([id, { label }]) => {
+    const names = [label, ...(acceptedNames[id] || [])].map(normalizeAnswer);
+    return { id, distance: Math.min(...names.map(name => spellingDistance(normalized, name))) };
+  }).sort((a, b) => a.distance - b.distance);
+  const best = scores[0];
+  const tolerance = normalized.length <= 5 ? 1 : normalized.length < 12 ? 2 : 3;
+  // Resolve against all labels first: a correctly spelled wrong category must fail.
+  if (best.distance > tolerance || best.distance === scores[1].distance) return null;
+  return best.id;
+}
+
+function checkWrittenAnswers() {
+  let correct = 0;
+  let filled = 0;
+  const used = new Set();
+  slots.forEach((input, id) => {
+    const raw = writtenAnswers.get(id) || '';
+    if (!raw.trim()) return;
+    filled++;
+    const recognized = recognizeAnswer(raw);
+    const target = labels.get(id);
+    const answer = labels.get(recognized);
+    const right = Boolean(answer && !used.has(recognized) && (target.type === 'leaf'
+      ? answer.type === 'leaf' && answer.parent === target.parent : recognized === id));
+    if (right) { correct++; used.add(recognized); }
+    input.classList.add(right ? 'correct' : 'incorrect');
+    input.setAttribute('aria-invalid', String(!right));
+    input.setAttribute('aria-label', `${input.dataset.field}: ${right ? 'richtig' : 'noch nicht richtig'}`);
+  });
+  status.textContent = correct === labels.size
+    ? 'Alles richtig! Du hast alle Wortarten eingetragen.'
+    : `${correct} von ${labels.size} richtig. ${labels.size - filled} Felder sind noch frei. Doppelrahmen: richtig. Gestrichelter Rahmen: noch nicht richtig. Prüfe auch, ob ein Begriff doppelt vorkommt.`;
+}
+
 function reset() {
   assignments.clear();
+  writtenAnswers.clear();
   selected = null;
   order = [...labels.keys()];
   for (let i = order.length - 1; i > 0; i--) {
@@ -179,16 +286,22 @@ document.querySelector('#reset').addEventListener('click', reset);
 reset();
 
 difficultyButton.addEventListener('click', () => {
-  difficulty = difficulty === 'leicht' ? 'mittel' : 'leicht';
-  const medium = difficulty === 'mittel';
+  const levels = ['leicht', 'mittel', 'schwer'];
+  difficulty = levels[(levels.indexOf(difficulty) + 1) % levels.length];
+  const name = difficulty[0].toUpperCase() + difficulty.slice(1);
+  const next = levels[(levels.indexOf(difficulty) + 1) % levels.length];
   document.querySelector('.card').dataset.difficulty = difficulty;
-  difficultyButton.textContent = `${medium ? 'Mittel' : 'Leicht'} · Zuordnen`;
-  difficultyButton.setAttribute('aria-pressed', String(medium));
-  difficultyButton.setAttribute('aria-label', `Schwierigkeit: ${medium ? 'Mittel. Zu Leicht' : 'Leicht. Zu Mittel'} wechseln.`);
+  difficultyButton.textContent = `${name} · ${difficulty === 'schwer' ? 'Eintragen' : 'Zuordnen'}`;
+  difficultyButton.removeAttribute('aria-pressed');
+  difficultyButton.setAttribute('aria-label', `Schwierigkeit: ${name}. Zu ${next} wechseln.`);
   selected = null;
   render();
   hideHint();
-  status.textContent = medium ? 'Mittel: ohne Farbhilfen. Deine Zuordnungen bleiben erhalten.' : 'Leicht: mit Farbhilfen. Deine Zuordnungen bleiben erhalten.';
+  hint.textContent = difficulty === 'schwer'
+    ? 'Trage die Begriffe in die Felder ein. Kleine Tippfehler werden verziehen. Mit Enter überprüfst du deine Antworten.'
+    : 'Ziehe einen Begriff in ein passendes Feld oder klicke zuerst den Begriff und dann das Feld an.';
+  status.textContent = `${name}: ${difficulty === 'schwer' ? 'Begriffe selbst eintragen' : difficulty === 'mittel' ? 'ohne Farbhilfen' : 'mit Farbhilfen'}.`;
+  requestAnimationFrame(syncBoxSize);
 });
 
 document.addEventListener('keydown', event => {
@@ -243,6 +356,10 @@ function drawConnectors() {
   groups.forEach(connectGroup);
 }
 function syncBoxSize() {
+  if (difficulty === 'schwer') {
+    tree.style.removeProperty('--item-width');
+    tree.style.removeProperty('--item-height');
+  }
   const token = bank.querySelector('.token');
   if (token) {
     const rect = token.getBoundingClientRect();
@@ -256,13 +373,21 @@ new ResizeObserver(drawConnectors).observe(tree);
 
 const hint = document.querySelector('#hint');
 let hintTimer;
+let hintAppearances = 0;
+let hintVisible = false;
 function hideHint() {
   clearTimeout(hintTimer);
   hint.classList.add('visually-hidden');
+  hintVisible = false;
 }
 function scheduleHint() {
   clearTimeout(hintTimer);
-  hintTimer = setTimeout(() => hint.classList.remove('visually-hidden'), 1200);
+  if (hintVisible || hintAppearances >= 3) return;
+  hintTimer = setTimeout(() => {
+    hint.classList.remove('visually-hidden');
+    hintVisible = true;
+    hintAppearances++;
+  }, 1200);
 }
 function leaveHint() {
   clearTimeout(hintTimer);
