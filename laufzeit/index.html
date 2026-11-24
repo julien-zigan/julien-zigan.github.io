@@ -13,15 +13,22 @@
       <h1 id="title">Laufzeit (Kartesisches Produkt)</h1>
     </header>
     <section class="label-area" aria-label="Python-Code">
-      <pre tabindex="0" aria-label="Python-Code für das kartesische Produkt"><code><span data-line="1"><span class="keyword">def</span> <span class="function">cart_product</span>(<span id="argument-a" class="argument">a</span>, <span id="argument-b" class="argument">b</span>):</span>
-<span data-line="2">    prod = []<span id="code-init" class="runtime-value"></span></span>
-<span data-line="3">    <span class="keyword">for</span> x <span class="keyword">in</span> a:<span id="code-x" class="runtime-value"></span></span>
-<span data-line="4">        <span class="keyword">for</span> y <span class="keyword">in</span> b:<span id="code-y" class="runtime-value"></span></span>
-<span data-line="5">            prod.<span class="function">append</span>((x, y))<span id="code-product" class="runtime-value"></span></span>
-<span data-line="6">    <span class="keyword">return</span> prod<span id="code-return" class="runtime-value"></span></span>
-<span id="function-call" data-line="7" hidden><span class="function">cart_product</span>([1, 2, 3], ['A', 'B'])</span></code></pre>
+      <pre tabindex="0" aria-label="Python-Code für das kartesische Produkt"><code><span class="runtime-value"># kartesisches_produkt.py</span>
+<span data-line="1"><span class="keyword">def</span> <span class="function">cart_product</span>(<span id="argument-a" class="argument">a</span>, <span id="argument-b" class="argument">b</span>):</span>
+<span data-line="2">    prod = []</span>
+<span data-line="3">    <span class="keyword">for</span> x <span class="keyword">in</span> a:</span>
+<span data-line="4">        <span class="keyword">for</span> y <span class="keyword">in</span> b:</span>
+<span data-line="5">            prod.<span class="function">append</span>((x, y))</span>
+<span data-line="6">    <span class="keyword">return</span> prod</span>
+<span id="function-call" data-line="7">result = <span class="function">cart_product</span>([1, 2, 3], ['A', 'B'])</span>
+<span data-line="8"><span class="function">print</span>(result)</span></code></pre>
       <p class="code-hint">Die markierte Zeile wurde gerade ausgeführt.</p>
+      <section class="terminal" aria-label="Bash-Terminal, simulierte Programmausführung">
+        <div class="terminal-title">Bash</div>
+        <pre tabindex="0" aria-label="Terminalausgabe"><span class="prompt">$ </span><span id="terminal-command"></span><span id="terminal-output" role="status" aria-live="polite"></span></pre>
+      </section>
     </section>
+    <section id="variables" class="content-area" aria-label="Aktuelle Variablen"></section>
     <footer>
       <button id="reset" type="button">Neu starten</button>
       <p id="status" role="status" aria-live="polite"></p>

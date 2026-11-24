@@ -5,8 +5,12 @@ export function buildSteps(a, b) {
   let y;
   let prod = null;
   let argumentsBound = 0;
+  let result = null;
+  let printed = false;
   const add = (line, message, pair = null) => steps.push({
-    line, message, x, y, pair, argumentsBound, prod: prod === null ? null : prod.map(value => [...value])
+    line, message, x, y, pair, argumentsBound, printed,
+    result: result === null ? null : result.map(value => [...value]),
+    prod: prod === null ? null : prod.map(value => [...value])
   });
   add(7, 'Die Funktion cart_product wird mit zwei Listen aufgerufen.');
   argumentsBound = 1;
@@ -26,5 +30,9 @@ export function buildSteps(a, b) {
   }
   add(3, 'Die Liste a ist durchlaufen. Die äußere Schleife endet.');
   add(6, `Die Funktion gibt prod mit ${prod.length} Paaren zurück.`);
+  result = prod;
+  add(7, 'Der Rückgabewert wird in result gespeichert.');
+  printed = true;
+  add(8, 'print(result) gibt das Ergebnis im Terminal aus.');
   return steps;
 }
