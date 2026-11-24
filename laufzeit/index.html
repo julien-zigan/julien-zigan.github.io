@@ -14,38 +14,31 @@
     </header>
     <section class="label-area" aria-label="Python-Code">
       <pre tabindex="0" aria-label="Python-Code für das kartesische Produkt"><code><span class="runtime-value"># kartesisches_produkt.py</span>
+<span id="function-call" data-line="7">result = <span class="function">cart_product</span>([1, 2, 3], ['A', 'B'])</span>
 <span data-line="1"><span class="keyword">def</span> <span class="function">cart_product</span>(<span id="argument-a" class="argument">a</span>, <span id="argument-b" class="argument">b</span>):</span>
 <span data-line="2">    prod = []</span>
 <span data-line="3">    <span class="keyword">for</span> x <span class="keyword">in</span> a:</span>
 <span data-line="4">        <span class="keyword">for</span> y <span class="keyword">in</span> b:</span>
 <span data-line="5">            prod.<span class="function">append</span>((x, y))</span>
 <span data-line="6">    <span class="keyword">return</span> prod</span>
-<span id="function-call" data-line="7">result = <span class="function">cart_product</span>([1, 2, 3], ['A', 'B'])</span>
 <span data-line="8"><span class="function">print</span>(result)</span></code></pre>
-      <p class="code-hint">Die markierte Zeile wurde gerade ausgeführt.</p>
       <section class="terminal" aria-label="Bash-Terminal, simulierte Programmausführung">
         <div class="terminal-title">Bash</div>
         <pre tabindex="0" aria-label="Terminalausgabe"><span class="prompt">$ </span><span id="terminal-command"></span><span id="terminal-output" role="status" aria-live="polite"></span></pre>
       </section>
     </section>
     <div class="content-area">
-      <section class="analysis" aria-labelledby="analysis-title">
-        <h2 id="analysis-title">Laufzeit zählen</h2>
-        <p>Eine elementare Operation = ein <code>append</code>-Aufruf. Alle anderen Operationen zählen in diesem Modell als kostenlos. Wir zählen Aufrufe, keine Sekunden.</p>
-        <fieldset>
-          <legend>Eingabegröße (n, m)</legend>
-          <label for="size-a">n = Länge von a <select id="size-a"></select></label>
-          <label for="size-b">m = Länge von b <select id="size-b"></select></label>
-        </fieldset>
-        <p class="size-hint">Eine Änderung startet die Ausführung neu.</p>
-        <p id="runtime-formula" class="formula"></p>
-        <p><strong id="operation-count">0</strong> <span id="operation-total"></span></p>
-        <div id="runtime-bars" aria-label="Gezählte Aufrufe pro äußerem Schleifendurchlauf"></div>
-        <p id="runtime-explanation"></p>
-        <details>
+      <section class="analysis" aria-label="Laufzeitanalyse">
+        <p id="operation-definition"><strong>Elementare Operation:</strong> <code>append()</code></p>
+        <p id="input-size"><strong>Eingabegröße I:</strong> n, m <span class="size-definition">n = <code>len(a)</code>, m = <code>len(b)</code></span></p>
+        <p id="runtime-formula" class="formula" hidden>T<sub>cart_product</sub><span id="runtime-formula-values"></span></p>
+        <p id="operation-counter" hidden><strong id="operation-count">0</strong> <span id="operation-total"></span></p>
+        <div id="runtime-bars" hidden aria-label="Werte von x und y pro äußerem Schleifendurchlauf"></div>
+        <p id="runtime-explanation" hidden></p>
+        <details id="worst-case" hidden>
           <summary>Warum ist das der Worst Case?</summary>
-          <p>Für jede Eingabe I = (a, b) mit den Längen (n, m) gilt: T(I) = n · m. Die Werte und ihre Reihenfolge ändern die Anzahl der Aufrufe nicht.</p>
-          <p>Das Maximum über alle Eingaben dieser Größe ist deshalb ebenfalls <strong>T(n, m) = n · m</strong>.</p>
+          <p>Für jede Eingabe I = (a, b) mit den Längen (n, m) gilt: T<sub>cart_product</sub>(I) = n · m. Die Werte und ihre Reihenfolge ändern die Anzahl der Aufrufe nicht.</p>
+          <p>Das Maximum über alle Eingaben dieser Größe ist deshalb ebenfalls <strong>T<sub>cart_product</sub>(n, m) = n · m</strong>.</p>
           <p id="growth-explanation"></p>
         </details>
       </section>

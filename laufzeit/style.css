@@ -15,7 +15,6 @@ pre:focus-visible { outline: 3px solid #111827; outline-offset: 3px; }
 .function { color: #075985; }
 [data-line] { white-space: pre; display: inline-block; min-width: 100%; border-left: 3px solid transparent; padding: 0 .35rem; }
 [data-line].active { background: #fff0bd; border-left-color: #845000; outline: 1px solid #845000; }
-.code-hint { margin: 1rem 0 0; }
 .list-value { position: relative; display: inline-block; padding: .1em .25em; border: 3px solid transparent; border-radius: .25rem; line-height: 1.3; }
 .list-value.selected::before { content: attr(data-variable); position: absolute; bottom: calc(100% + .15rem); left: 50%; transform: translateX(-50%); padding: 0 .25rem; background: #173f78; color: white; border: 1px solid #071d3d; border-radius: .2rem; font-size: 1rem; font-weight: 800; line-height: 1.3; text-decoration: none; }
 .list-value.selected { background: #173f78; color: white; border-color: #071d3d; box-shadow: 0 0 0 2px white; font-size: 1.2em; font-weight: 800; text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: .15em; }
@@ -50,7 +49,8 @@ footer { min-height: calc(44px + 1.7rem); background: #f0f0ed; border-top: 1px s
 .argument { padding-top: 1.75rem; }
 .runtime-value { color: #476547; }
 
-#function-call { margin-top: 1.5rem; white-space: pre; }
+#function-call { white-space: pre; }
+[data-line="6"] { margin-bottom: 1.5rem; }
 [hidden] { display: none !important; }
 .terminal { margin-top: 1.5rem; background: #090b0f; color: #f3f4f6; border: 2px solid #394454; border-radius: .5rem; overflow: hidden; }
 .terminal-title { padding: .35rem .75rem; background: #222831; color: #f3f4f6; font-size: 1rem; }
@@ -59,16 +59,15 @@ footer { min-height: calc(44px + 1.7rem); background: #f0f0ed; border-top: 1px s
 .analysis { font-family: system-ui, sans-serif; margin-bottom: 1.5rem; line-height: 1.5; }
 .analysis h2 { margin: 0 0 .5rem; font-size: 1.25rem; }
 .analysis p { margin: .65rem 0; }
-.analysis fieldset { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin: 1rem 0 0; border: 1px solid #637989; border-radius: .4rem; }
-.analysis label { display: flex; align-items: center; gap: .5rem; }
-.analysis select { min-height: 44px; min-width: 4rem; font: inherit; color: #192d3d; background: white; border: 2px solid #526879; border-radius: .3rem; padding: .25rem; }
-.analysis select:focus-visible, .analysis summary:focus-visible { outline: 3px solid #111827; outline-offset: 3px; }
+#operation-definition { white-space: nowrap; }
+.size-definition { display: inline-block; margin-left: 1.25rem; }
+.analysis summary:focus-visible { outline: 3px solid #111827; outline-offset: 3px; }
 .analysis summary { min-height: 44px; display: list-item; align-content: center; cursor: pointer; font-weight: 650; }
-.size-hint { color: #405c70; }
 .formula { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-weight: 750; font-size: 1.15rem; }
 #operation-count { display: inline-block; min-width: 2ch; font-size: 1.8rem; }
 .runtime-row { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) 4rem; align-items: center; gap: .5rem; margin: .35rem 0; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
-.runtime-row progress { width: 100%; height: 1.25rem; accent-color: #173f78; }
+.runtime-y { justify-self: start; }
+.analysis sub { font-size: .7em; vertical-align: sub; }
 #variables { max-height: 18rem; overflow-y: auto; }
 #variables:focus-visible { outline: 3px solid #111827; outline-offset: 3px; }
 

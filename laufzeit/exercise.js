@@ -1,8 +1,8 @@
 import { buildSteps } from './model.mjs';
 
-let a = [1, 2, 3];
-let b = ['A', 'B'];
-let steps = buildSteps(a, b);
+const a = [1, 2, 3];
+const b = ['A', 'B'];
+const steps = buildSteps(a, b);
 const byId = id => document.getElementById(id);
 const format = value => typeof value === 'string' ? `'${value}'` : String(value);
 const pairText = pair => `(${pair.map(format).join(', ')})`;
@@ -154,17 +154,37 @@ function reset() {
 byId('reset').addEventListener('click', reset);
 
 function updateRuntime(state) {
+  const seen = steps.slice(0, position + 1);
+  const outerStarted = seen.some(step => step.line === 3);
+  const firstAppend = seen.some(step => step.line === 5);
+  const complete = state?.line === 6 || state?.result != null;
+  const reveal = (id, visible) => {
+    const element = byId(id);
+    const wasHidden = element.hidden;
+    element.hidden = !visible;
+    if (visible && wasHidden) emphasize(element);
+  };
+  reveal('operation-counter', firstAppend || complete);
+  reveal('runtime-bars', outerStarted && a.length > 0);
+  reveal('runtime-explanation', outerStarted || complete);
+  reveal('runtime-formula', complete);
+  reveal('worst-case', complete);
+  if (!complete) byId('worst-case').open = false;
   const count = state?.prod?.length ?? 0;
   const counter = byId('operation-count');
   const changed = counter.textContent !== String(count);
   counter.textContent = count;
   if (changed && state?.line === 5) emphasize(counter);
-  byId('operation-total').textContent = `von ${a.length * b.length} append-Aufrufen ausgeführt`;
-  byId('runtime-formula').textContent = `T(n, m) = n · m = ${a.length} · ${b.length} = ${a.length * b.length}`;
-  byId('runtime-explanation').textContent = a.length === 0 || b.length === 0
-    ? 'Eine Liste ist leer: Es entstehen keine Paare, also gibt es 0 append-Aufrufe.'
-    : `Die äußere Schleife hat ${a.length} Durchläufe. Pro Durchlauf durchläuft die innere Schleife alle ${b.length} Elemente von b: jeweils ${b.length} append-Aufrufe.`;
-  byId('growth-explanation').textContent = `Verdoppeln wir nur n oder nur m, verdoppelt sich die Anzahl. Verdoppeln wir beide, vervierfacht sie sich: (2n) · (2m) = 4nm. Für n = m gilt T(n, n) = n².`;
+  byId('operation-total').textContent = complete ? `von ${a.length * b.length} append-Aufrufen ausgeführt` : 'append-Aufrufe bisher ausgeführt';
+  byId('runtime-formula-values').textContent = `(n, m) = n · m = ${a.length} · ${b.length} = ${a.length * b.length}`;
+  byId('runtime-explanation').textContent = complete
+    ? (a.length === 0 || b.length === 0
+      ? 'Eine Liste ist leer: Es entstehen keine Paare, also gibt es 0 append-Aufrufe.'
+      : `Die äußere Schleife hatte ${a.length} Durchläufe mit jeweils ${b.length} append-Aufrufen. Insgesamt: ${a.length} · ${b.length} = ${a.length * b.length}.`)
+    : state?.y !== undefined
+      ? `Die innere Schleife durchläuft b für x = ${state.x}. Jeder append-Aufruf erhöht den Zähler um 1.`
+      : 'Die äußere Schleife nimmt den nächsten Wert aus a.';
+  byId('growth-explanation').textContent = `Verdoppeln wir nur n oder nur m, verdoppelt sich die Anzahl. Verdoppeln wir beide, vervierfacht sie sich: (2n) · (2m) = 4nm. Für n = m wächst die Anzahl quadratisch: n · n = n².`;
   const bars = byId('runtime-bars');
   if (bars.children.length !== a.length) {
     bars.replaceChildren(...a.map((value, index) => {
@@ -172,43 +192,28 @@ function updateRuntime(state) {
       row.className = 'runtime-row';
       const label = document.createElement('span');
       label.textContent = `x = ${value}`;
-      const progress = document.createElement('progress');
-      progress.max = Math.max(1, b.length);
-      progress.value = 0;
-      progress.setAttribute('aria-label', `append-Aufrufe im äußeren Durchlauf ${index + 1}`);
+      const yValue = document.createElement('span');
+      yValue.className = 'runtime-y';
+      yValue.textContent = 'y = –';
       const number = document.createElement('span');
-      row.append(label, progress, number);
+      row.append(label, yValue, number);
       return row;
     }));
   }
   [...bars.children].forEach((row, index) => {
+    row.hidden = !seen.some(step => step.line === 3 && step.x === a[index]);
     const done = Math.max(0, Math.min(b.length, count - index * b.length));
-    const progress = row.querySelector('progress');
-    const previous = progress.value;
-    progress.max = Math.max(1, b.length);
-    progress.value = done;
+    const yValue = row.querySelector('.runtime-y');
+    const latest = seen.findLast(step => step.line === 4 && step.pair && step.x === a[index]);
+    const text = latest ? `y = ${format(latest.y)}` : 'y = –';
+    if (yValue.textContent !== text) {
+      yValue.textContent = text;
+      if (latest) emphasize(yValue);
+    }
+    const previous = row.lastElementChild.textContent;
     row.lastElementChild.textContent = `${done} / ${b.length}`;
-    if (done !== previous && state?.line === 5) emphasize(row);
-  });
-}
+    if (row.lastElementChild.textContent !== previous && state?.line === 5) emphasize(row);
 
-for (const [id, initial] of [['size-a', a.length], ['size-b', b.length]]) {
-  const select = byId(id);
-  for (let size = 0; size <= 8; size += 1) {
-    select.add(new Option(String(size), String(size), false, size === initial));
-  }
-  select.addEventListener('change', () => {
-    a = Array.from({ length: Number(byId('size-a').value) }, (_, i) => i + 1);
-    b = Array.from({ length: Number(byId('size-b').value) }, (_, i) => String.fromCharCode(65 + i));
-    steps = buildSteps(a, b);
-    const call = byId('function-call');
-    call.replaceChildren(document.createTextNode('result = '));
-    const name = document.createElement('span');
-    name.className = 'function';
-    name.textContent = 'cart_product';
-    call.append(name, document.createTextNode(`([${a.map(format).join(', ')}], [${b.map(format).join(', ')}])`));
-    reset();
-    reserveCodeWidth();
   });
 }
 
