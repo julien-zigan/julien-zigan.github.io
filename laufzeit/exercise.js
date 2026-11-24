@@ -1,8 +1,8 @@
 import { buildSteps } from './model.mjs';
 
-const a = [1, 2, 3];
-const b = ['A', 'B'];
-const steps = buildSteps(a, b);
+let a = [1, 2, 3];
+let b = ['A', 'B'];
+let steps = buildSteps(a, b);
 const byId = id => document.getElementById(id);
 const format = value => typeof value === 'string' ? `'${value}'` : String(value);
 const pairText = pair => `(${pair.map(format).join(', ')})`;
@@ -33,9 +33,11 @@ function updateValues(state) {
     const bound = state?.argumentsBound >= index;
     if (!bound) {
       argument.textContent = name;
+      delete argument.dataset.bound;
       continue;
     }
-    if (!argument.querySelector('.list-value')) {
+    if (!argument.dataset.bound) {
+      argument.dataset.bound = 'true';
       argument.replaceChildren(document.createTextNode(`${name} = [`));
       values.forEach((value, i) => {
         if (i) argument.append(document.createTextNode(', '));
@@ -126,6 +128,7 @@ byId('next').addEventListener('click', async () => {
   if (token !== generation) return;
   updateValues(state);
   updateVariables(state);
+  updateRuntime(state);
   if (state.printed) {
     await typeTerminal('terminal-output', `\n[${state.result.map(pairText).join(', ')}]\n$ `, token);
     if (token !== generation) return;
@@ -141,6 +144,7 @@ function reset() {
   highlightCode(null);
   updateValues(null);
   updateVariables(null);
+  updateRuntime(null);
   byId('terminal-command').textContent = '';
   byId('terminal-output').textContent = '';
   byId('status').textContent = 'Bereit für den Funktionsaufruf.';
@@ -148,6 +152,65 @@ function reset() {
 
 }
 byId('reset').addEventListener('click', reset);
+
+function updateRuntime(state) {
+  const count = state?.prod?.length ?? 0;
+  const counter = byId('operation-count');
+  const changed = counter.textContent !== String(count);
+  counter.textContent = count;
+  if (changed && state?.line === 5) emphasize(counter);
+  byId('operation-total').textContent = `von ${a.length * b.length} append-Aufrufen ausgeführt`;
+  byId('runtime-formula').textContent = `T(n, m) = n · m = ${a.length} · ${b.length} = ${a.length * b.length}`;
+  byId('runtime-explanation').textContent = a.length === 0 || b.length === 0
+    ? 'Eine Liste ist leer: Es entstehen keine Paare, also gibt es 0 append-Aufrufe.'
+    : `Die äußere Schleife hat ${a.length} Durchläufe. Pro Durchlauf durchläuft die innere Schleife alle ${b.length} Elemente von b: jeweils ${b.length} append-Aufrufe.`;
+  byId('growth-explanation').textContent = `Verdoppeln wir nur n oder nur m, verdoppelt sich die Anzahl. Verdoppeln wir beide, vervierfacht sie sich: (2n) · (2m) = 4nm. Für n = m gilt T(n, n) = n².`;
+  const bars = byId('runtime-bars');
+  if (bars.children.length !== a.length) {
+    bars.replaceChildren(...a.map((value, index) => {
+      const row = document.createElement('div');
+      row.className = 'runtime-row';
+      const label = document.createElement('span');
+      label.textContent = `x = ${value}`;
+      const progress = document.createElement('progress');
+      progress.max = Math.max(1, b.length);
+      progress.value = 0;
+      progress.setAttribute('aria-label', `append-Aufrufe im äußeren Durchlauf ${index + 1}`);
+      const number = document.createElement('span');
+      row.append(label, progress, number);
+      return row;
+    }));
+  }
+  [...bars.children].forEach((row, index) => {
+    const done = Math.max(0, Math.min(b.length, count - index * b.length));
+    const progress = row.querySelector('progress');
+    const previous = progress.value;
+    progress.max = Math.max(1, b.length);
+    progress.value = done;
+    row.lastElementChild.textContent = `${done} / ${b.length}`;
+    if (done !== previous && state?.line === 5) emphasize(row);
+  });
+}
+
+for (const [id, initial] of [['size-a', a.length], ['size-b', b.length]]) {
+  const select = byId(id);
+  for (let size = 0; size <= 8; size += 1) {
+    select.add(new Option(String(size), String(size), false, size === initial));
+  }
+  select.addEventListener('change', () => {
+    a = Array.from({ length: Number(byId('size-a').value) }, (_, i) => i + 1);
+    b = Array.from({ length: Number(byId('size-b').value) }, (_, i) => String.fromCharCode(65 + i));
+    steps = buildSteps(a, b);
+    const call = byId('function-call');
+    call.replaceChildren(document.createTextNode('result = '));
+    const name = document.createElement('span');
+    name.className = 'function';
+    name.textContent = 'cart_product';
+    call.append(name, document.createTextNode(`([${a.map(format).join(', ')}], [${b.map(format).join(', ')}])`));
+    reset();
+    reserveCodeWidth();
+  });
+}
 
 function reserveCodeWidth() {
   // Measure the widest signature before any execution step changes the layout.

@@ -28,7 +28,29 @@
         <pre tabindex="0" aria-label="Terminalausgabe"><span class="prompt">$ </span><span id="terminal-command"></span><span id="terminal-output" role="status" aria-live="polite"></span></pre>
       </section>
     </section>
-    <section id="variables" class="content-area" aria-label="Aktuelle Variablen"></section>
+    <div class="content-area">
+      <section class="analysis" aria-labelledby="analysis-title">
+        <h2 id="analysis-title">Laufzeit zählen</h2>
+        <p>Eine elementare Operation = ein <code>append</code>-Aufruf. Alle anderen Operationen zählen in diesem Modell als kostenlos. Wir zählen Aufrufe, keine Sekunden.</p>
+        <fieldset>
+          <legend>Eingabegröße (n, m)</legend>
+          <label for="size-a">n = Länge von a <select id="size-a"></select></label>
+          <label for="size-b">m = Länge von b <select id="size-b"></select></label>
+        </fieldset>
+        <p class="size-hint">Eine Änderung startet die Ausführung neu.</p>
+        <p id="runtime-formula" class="formula"></p>
+        <p><strong id="operation-count">0</strong> <span id="operation-total"></span></p>
+        <div id="runtime-bars" aria-label="Gezählte Aufrufe pro äußerem Schleifendurchlauf"></div>
+        <p id="runtime-explanation"></p>
+        <details>
+          <summary>Warum ist das der Worst Case?</summary>
+          <p>Für jede Eingabe I = (a, b) mit den Längen (n, m) gilt: T(I) = n · m. Die Werte und ihre Reihenfolge ändern die Anzahl der Aufrufe nicht.</p>
+          <p>Das Maximum über alle Eingaben dieser Größe ist deshalb ebenfalls <strong>T(n, m) = n · m</strong>.</p>
+          <p id="growth-explanation"></p>
+        </details>
+      </section>
+      <section id="variables" tabindex="0" aria-label="Aktuelle Variablen, bei Bedarf scrollbar"></section>
+    </div>
     <footer>
       <button id="reset" type="button">Neu starten</button>
       <p id="status" role="status" aria-live="polite"></p>
