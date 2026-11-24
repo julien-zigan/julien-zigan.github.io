@@ -178,7 +178,7 @@ reset();
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape') {
     if (selected) select(selected);
-    document.querySelector('.help').open = false;
+    hideHint();
   }
 });
 
@@ -226,4 +226,41 @@ function drawConnectors() {
   }
   groups.forEach(connectGroup);
 }
+function syncBoxSize() {
+  const token = bank.querySelector('.token');
+  if (token) {
+    const rect = token.getBoundingClientRect();
+    tree.style.setProperty('--item-width', `${rect.width}px`);
+    tree.style.setProperty('--item-height', `${rect.height}px`);
+  }
+  drawConnectors();
+}
+new ResizeObserver(syncBoxSize).observe(bank);
 new ResizeObserver(drawConnectors).observe(tree);
+
+const hint = document.querySelector('#hint');
+let hintTimer;
+function hideHint() {
+  clearTimeout(hintTimer);
+  hint.classList.add('visually-hidden');
+}
+function scheduleHint() {
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(() => hint.classList.remove('visually-hidden'), 1200);
+}
+function leaveHint() {
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(hideHint, 200);
+}
+for (const region of [bank, document.querySelector('.diagram-scroll')]) {
+  region.addEventListener('pointerenter', scheduleHint);
+  region.addEventListener('pointerleave', leaveHint);
+  region.addEventListener('focusin', scheduleHint);
+  region.addEventListener('focusout', event => {
+    if (!region.contains(event.relatedTarget)) leaveHint();
+  });
+  region.addEventListener('dragstart', hideHint);
+  region.addEventListener('pointerdown', hideHint);
+}
+hint.addEventListener('pointerenter', () => clearTimeout(hintTimer));
+hint.addEventListener('pointerleave', leaveHint);

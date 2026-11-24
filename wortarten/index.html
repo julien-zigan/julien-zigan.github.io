@@ -10,15 +10,11 @@
 <body>
   <main class="card">
     <header>
-      <details class="help">
-        <summary>Hilfe</summary>
-        <p>Begriffe ziehen oder mit Tab auswählen und mit Enter oder Leertaste aktivieren. Danach ein Feld aktivieren. Escape hebt die Auswahl auf. Verzweigungen gehören in blaue Felder, Wortarten in gelbe. Die Reihenfolge innerhalb einer Blattgruppe ist egal. Belegte Felder tauschen ihre Begriffe.</p>
-      </details>
       <p class="level">Leicht · Zuordnen</p>
       <h1>Wortarten</h1>
     </header>
-    <section aria-label="Begriffe zum Zuordnen" aria-describedby="hint" title="Begriffe ziehen oder Begriff und Feld anklicken. Die Reihenfolge innerhalb einer Blattgruppe ist egal." id="bank" class="bank"></section>
-    <div class="diagram-scroll" tabindex="0" role="region" aria-describedby="hint" title="Begriffe ziehen oder Begriff und Feld anklicken. Die Reihenfolge innerhalb einer Blattgruppe ist egal." aria-label="Wortartenbaum, bei Bedarf horizontal scrollbar">
+    <section aria-label="Begriffe zum Zuordnen" aria-describedby="hint" id="bank" class="bank"></section>
+    <div class="diagram-scroll" tabindex="0" role="region" aria-describedby="hint" aria-label="Wortartenbaum, bei Bedarf horizontal scrollbar">
       <div id="tree" class="tree"></div>
     </div>
     <footer>
@@ -26,7 +22,7 @@
       <button id="reset" type="button" class="secondary">Neu starten</button>
       <button id="check" type="button">Überprüfen</button>
     </footer>
-    <p id="hint" class="visually-hidden">Begriffe ziehen oder Begriff und Feld anklicken. Die Reihenfolge innerhalb einer Blattgruppe ist egal.</p>
+    <p id="hint" class="hover-hint visually-hidden" role="tooltip">Ziehe einen Begriff in ein passendes Feld oder klicke zuerst den Begriff und dann das Feld an.</p>
     <noscript>Bitte aktiviere JavaScript, um die Begriffe zuzuordnen.</noscript>
   </main>
 </body>
