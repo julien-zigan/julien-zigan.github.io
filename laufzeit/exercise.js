@@ -18,25 +18,8 @@ function emphasize(element) {
   ], { duration: 650, easing: 'ease-out' });
 }
 
-function updateCode(state) {
+function highlightCode(state) {
   byId('function-call').hidden = !state;
-  for (const [index, name, values] of [[1, 'a', a], [2, 'b', b]]) {
-    const argument = byId(`argument-${name}`);
-    const bound = state?.argumentsBound >= index;
-    const text = bound ? `${name} = [${values.map(format).join(', ')}]` : name;
-    if (argument.textContent !== text) {
-      argument.textContent = text;
-      if (bound) emphasize(argument);
-    }
-  }
-  for (const name of ['x', 'y']) {
-    const annotation = byId(`code-${name}`);
-    const text = state?.[name] === undefined ? '' : ` # ${name} = ${format(state[name])}`;
-    if (annotation.textContent !== text) {
-      annotation.textContent = text;
-      if (text) emphasize(annotation);
-    }
-  }
   document.querySelectorAll('[data-line]').forEach(line => {
     const active = Number(line.dataset.line) === state?.line;
     line.classList.toggle('active', active);
@@ -45,50 +28,49 @@ function updateCode(state) {
   });
 }
 
-function renderList(id, values, current) {
-  const list = byId(id);
-  if (!list.querySelector('.list-value')) {
-    list.append(document.createTextNode('['));
-    values.forEach((value, index) => {
-      if (index) list.append(document.createTextNode(', '));
-      const item = document.createElement('span');
-      item.className = 'list-value';
-      item.textContent = format(value);
-      list.append(item);
+function updateComment(id, text) {
+  const comment = byId(id);
+  if (comment.textContent === text) return;
+  comment.textContent = text;
+  if (text) emphasize(comment);
+}
+
+function updateValues(state) {
+  for (const [index, name, values] of [[1, 'a', a], [2, 'b', b]]) {
+    const argument = byId(`argument-${name}`);
+    const bound = state?.argumentsBound >= index;
+    if (!bound) {
+      argument.textContent = name;
+      continue;
+    }
+    if (!argument.querySelector('.list-value')) {
+      argument.replaceChildren(document.createTextNode(`${name} = [`));
+      values.forEach((value, i) => {
+        if (i) argument.append(document.createTextNode(', '));
+        const item = document.createElement('span');
+        item.className = 'list-value';
+        item.textContent = format(value);
+        argument.append(item);
+      });
+      argument.append(document.createTextNode(']'));
+      emphasize(argument);
+    }
+    argument.querySelectorAll('.list-value').forEach((item, i) => {
+      const selected = values[i] === state[name === 'a' ? 'x' : 'y'];
+      const changed = selected && !item.classList.contains('selected');
+      item.classList.toggle('selected', selected);
+      if (selected) item.setAttribute('aria-current', 'true');
+      else item.removeAttribute('aria-current');
+      if (changed) emphasize(item);
     });
-    list.append(document.createTextNode(']'));
   }
-  list.querySelectorAll('.list-value').forEach((item, index) => {
-    const selected = values[index] === current;
-    const wasSelected = item.classList.contains('selected');
-    item.classList.toggle('selected', selected);
-    if (selected) item.setAttribute('aria-current', 'true');
-    else item.removeAttribute('aria-current');
-    if (selected && !wasSelected) emphasize(item);
-  });
-}
-
-function updatePanel(name, visible, update) {
-  const panel = byId(`panel-${name}`);
-  const wasHidden = panel.hidden;
-  const before = panel.textContent;
-  panel.hidden = !visible;
-  if (!visible) return;
-  update();
-  if (wasHidden || panel.textContent !== before) emphasize(panel);
-}
-
-function updateMain(state) {
-  updatePanel('a', state?.argumentsBound >= 1, () => renderList('list-a', a, state?.x));
-  updatePanel('b', state?.argumentsBound >= 2, () => renderList('list-b', b, state?.y));
   for (const name of ['x', 'y']) {
-    updatePanel(name, state?.[name] !== undefined, () => {
-      byId(name).textContent = format(state[name]);
-    });
+    updateComment(`code-${name}`, state?.[name] === undefined ? '' : ` # ${name} = ${format(state[name])}`);
   }
-  updatePanel('product', state?.prod != null, () => {
-    byId('product').textContent = `[${state.prod.map(pairText).join(', ')}]`;
-  });
+  updateComment('code-init', state?.prod == null ? '' : ' # prod = []');
+  const product = state?.prod == null ? '' : `[${state.prod.map(pairText).join(', ')}]`;
+  updateComment('code-product', state?.prod?.length ? ` # prod = ${product}` : '');
+  updateComment('code-return', state?.line === 6 ? ` # Ergebnis: ${product}` : '');
 }
 
 byId('next').addEventListener('click', async () => {
@@ -106,12 +88,12 @@ byId('next').addEventListener('click', async () => {
     await new Promise(resolve => setTimeout(resolve, reducedMotion.matches ? 0 : 400));
     if (token !== generation) return;
   }
-  updateCode(state);
+  highlightCode(state);
   byId('status').textContent = `Schritt ${position + 1}/${steps.length}: ${state.message}`;
-  // Give the code change its own moment before updating the visualization.
+  // Highlight the executed line before animating its values and comments.
   await new Promise(resolve => setTimeout(resolve, reducedMotion.matches ? 150 : 700));
   if (token !== generation) return;
-  updateMain(state);
+  updateValues(state);
   await new Promise(resolve => setTimeout(resolve, reducedMotion.matches ? 0 : 650));
   if (token !== generation) return;
   byId('next').disabled = position === steps.length - 1;
@@ -120,13 +102,11 @@ byId('next').addEventListener('click', async () => {
 function reset() {
   generation += 1;
   position = -1;
-  updateCode(null);
-  updateMain(null);
+  highlightCode(null);
+  updateValues(null);
   byId('status').textContent = 'Bereit für den Funktionsaufruf.';
   byId('next').disabled = false;
-  // Remove old list selections so restarting also animates their first use.
-  byId('list-a').replaceChildren();
-  byId('list-b').replaceChildren();
+
 }
 byId('reset').addEventListener('click', reset);
 reset();
